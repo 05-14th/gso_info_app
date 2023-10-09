@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="cnsc_maroon">#870400</color>
+    <color name="cnsc_gold">#F1C900</color>
+    <color name="neon_blue">#1589FF</color>
+    <color name="classic_brown">#714C32</color>
+    <color name="light_brown">#C4A484</color>
+    <color name="light_grey">#9B9B9B</color>
+    <color name="beige">#f5f5dc</color>
+</resources>
