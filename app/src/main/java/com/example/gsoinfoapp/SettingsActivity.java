@@ -1,14 +1,17 @@
 package com.example.gsoinfoapp;
 
+import static android.graphics.Color.parseColor;
+
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -21,18 +24,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-
 public class SettingsActivity extends AppCompatActivity {
-    private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
+
     private Button resetButton;
     private Button saveButton;
     private ImageButton return_home;
@@ -46,29 +39,53 @@ public class SettingsActivity extends AppCompatActivity {
     private RadioButton helveticaFont;
     private RadioButton timesFont;
     private RadioGroup fontStyles;
-    private TextView headerView;
+    public TextView headerView;
+    private MyDBHelper dbHelper;
+    private SQLiteDatabase db;
+    private Cursor cursor;
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         setContentView(R.layout.settings);
+        dbHelper = new MyDBHelper(getApplicationContext());
+        db = dbHelper.getWritableDatabase();
+        String[] themeList = {MyContract.Entry.columnBackground, MyContract.Entry.columnSubBg, MyContract.Entry.buttonColor};
+        cursor = db.query(MyContract.Entry.TableName, themeList, null, null, null, null, null);
+        initializeTheme();
         defaultMode  = findViewById(R.id.default_mode);
         classicMode = findViewById(R.id.classic_mode);
         darkMode = findViewById(R.id.dark_mode);
-        resetButton = findViewById(R.id.resetDefault);
-        saveButton = findViewById(R.id.saveSettings);
-        return_home = findViewById(R.id.returnHome_);
-        settingsLayout_ = findViewById(R.id.settingsLayout);
         themeStyles = findViewById(R.id.themes_mode);
         fontStyles = findViewById(R.id.font_group);
         arialFont = findViewById(R.id.arial);
         helveticaFont = findViewById(R.id.helvetica);
         timesFont = findViewById(R.id.times_new_roman);
+
+        // Changable Parts
+        settingsLayout_ = findViewById(R.id.settingsLayout);
+        resetButton = findViewById(R.id.resetDefault);
+        saveButton = findViewById(R.id.saveSettings);
+        return_home = findViewById(R.id.returnHome_);
         headerView = findViewById(R.id.settingsTitle);
         settingsHolder_ = findViewById(R.id.settingsHolder);
-        preferences = getSharedPreferences("savedPreferences", Context.MODE_PRIVATE);
-        editor = preferences.edit();
         fontControl();
         themesControl();
+        themeStyles.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("selected_option_id", checkedId);
+                editor.apply();
+            }
+        });
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDefaultMode();
+            }
+        });
+
     }
 
     public void returnHome(View view){
@@ -81,51 +98,100 @@ public class SettingsActivity extends AppCompatActivity {
         arialFont.setChecked(true);
     }
 
-    public void themesControl(){
-        defaultMode.setChecked(true);
+   public void themesControl() {
+        themeStyles = findViewById(R.id.themes_mode);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        int lastSelectedId = sharedPreferences.getInt("selected_option_id", R.id.default_mode); // Default to the first option
+
+        themeStyles.check(lastSelectedId);
     }
 
-    public void defaultSettings(View view){
-        defaultMode.setChecked(true);
-        settingsLayout_.setBackgroundColor(getColor(R.color.cnsc_maroon));
-        saveButton.setBackgroundColor(getColor(R.color.cnsc_gold));
-        resetButton.setBackgroundColor(getColor(R.color.cnsc_gold));
-        return_home.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.cnsc_gold)));
-        headerView.setBackgroundColor(getColor(R.color.cnsc_gold));
-        settingsHolder_.setBackgroundColor(getColor(R.color.white));
-        editor.putInt("background_color", getColor(R.color.cnsc_maroon));
-        editor.apply();
+    @SuppressLint("Range")
+    public void initializeTheme(){
+        settingsLayout_ = findViewById(R.id.settingsLayout);
+        resetButton = findViewById(R.id.resetDefault);
+        saveButton = findViewById(R.id.saveSettings);
+        return_home = findViewById(R.id.returnHome_);
+        headerView = findViewById(R.id.settingsTitle);
+        settingsHolder_ = findViewById(R.id.settingsHolder);
+
+        while(cursor.moveToNext()) {
+            String bgColor = "#" + cursor.getString(cursor.getColumnIndex("main_background"));
+            int bg_color = Color.parseColor(bgColor);
+            String subBgColor = "#" + cursor.getString(cursor.getColumnIndex("sub_background"));
+            int sub_bg_color = Color.parseColor(subBgColor);
+            String buttonColor = "#" + cursor.getString (cursor.getColumnIndex("button_color"));
+            int button_color_ = Color.parseColor(buttonColor);
+
+            settingsLayout_.setBackgroundColor(bg_color);
+            settingsHolder_.setBackgroundColor(sub_bg_color);
+            headerView.setBackgroundColor(button_color_);
+            return_home.setBackgroundTintList(ColorStateList.valueOf(button_color_));
+            saveButton.setBackgroundColor(button_color_);
+            resetButton.setBackgroundColor(button_color_);
+        }
     }
 
     public void setDefaultMode(){
         defaultMode.setChecked(true);
-        settingsLayout_.setBackgroundColor(getColor(R.color.cnsc_maroon));
-        saveButton.setBackgroundColor(getColor(R.color.cnsc_gold));
-        resetButton.setBackgroundColor(getColor(R.color.cnsc_gold));
-        return_home.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.cnsc_gold)));
-        headerView.setBackgroundColor(getColor(R.color.cnsc_gold));
-        settingsHolder_.setBackgroundColor(getColor(R.color.white));
-        settingsHolder_.setBackgroundColor(getColor(R.color.white));
+        int bg_color = getColor(R.color.cnsc_maroon);
+        int sub_bg_color = getColor(R.color.white);
+        int button_color_ = getColor(R.color.cnsc_gold);
+        ContentValues values = new ContentValues();
+        db.execSQL(MyContract.Entry.DELETE_TABLE);
+        values.put(MyContract.Entry.columnBackground,  Integer.toHexString(getColor(R.color.cnsc_maroon)).substring(2));
+        values.put(MyContract.Entry.columnSubBg, Integer.toHexString(getColor(R.color.white)).substring(2));
+        values.put(MyContract.Entry.buttonColor,  Integer.toHexString(getColor(R.color.cnsc_gold)).substring(2));
+        db.insert(MyContract.Entry.TableName, null, values);
+        initializeTheme();
+        settingsLayout_.setBackgroundColor(bg_color);
+        settingsHolder_.setBackgroundColor(sub_bg_color);
+        headerView.setBackgroundColor(button_color_);
+        return_home.setBackgroundTintList(ColorStateList.valueOf(button_color_));
+        saveButton.setBackgroundColor(button_color_);
+        resetButton.setBackgroundColor(button_color_);
     }
 
+
     public void setDarkMode(){
+        int bg_color = getColor(R.color.black);
+        int sub_bg_color = getColor(R.color.light_grey);
+        int button_color_ = getColor(R.color.neon_blue);
         darkMode.setChecked(true);
-        settingsLayout_.setBackgroundColor(getColor(R.color.black));
-        saveButton.setBackgroundColor(getColor(R.color.neon_blue));
-        resetButton.setBackgroundColor(getColor(R.color.neon_blue));
-        return_home.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.neon_blue)));
-        headerView.setBackgroundColor(getColor(R.color.neon_blue));
-        settingsHolder_.setBackgroundColor(getColor(R.color.light_grey));
+        ContentValues _values = new ContentValues();
+        db.execSQL(MyContract.Entry.DELETE_TABLE);
+        _values.put(MyContract.Entry.columnBackground, Integer.toHexString(getColor(R.color.black)).substring(2));
+        _values.put(MyContract.Entry.columnSubBg,  Integer.toHexString(getColor(R.color.light_grey)).substring(2) );
+        _values.put(MyContract.Entry.buttonColor, Integer.toHexString(getColor(R.color.neon_blue)).substring(2));
+        db.insert(MyContract.Entry.TableName, null, _values);
+        initializeTheme();
+        settingsLayout_.setBackgroundColor(bg_color);
+        settingsHolder_.setBackgroundColor(sub_bg_color);
+        headerView.setBackgroundColor(button_color_);
+        return_home.setBackgroundTintList(ColorStateList.valueOf(button_color_));
+        saveButton.setBackgroundColor(button_color_);
+        resetButton.setBackgroundColor(button_color_);
     }
 
     public void setClassicMode(){
+        int bg_color = getColor(R.color.classic_brown);
+        int sub_bg_color = getColor(R.color.beige);
+        int button_color_ = getColor(R.color.light_brown);
         classicMode.setChecked(true);
-        settingsLayout_.setBackgroundColor(getColor(R.color.classic_brown));
-        saveButton.setBackgroundColor(getColor(R.color.light_brown));
-        resetButton.setBackgroundColor(getColor(R.color.light_brown));
-        return_home.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.light_brown)));
-        headerView.setBackgroundColor(getColor(R.color.light_brown));
-        settingsHolder_.setBackgroundColor(getColor(R.color.beige));
+        ContentValues values_ = new ContentValues();
+        db.execSQL(MyContract.Entry.DELETE_TABLE);
+        values_.put(MyContract.Entry.columnBackground, Integer.toHexString(getColor(R.color.classic_brown)).substring(2));
+        values_.put(MyContract.Entry.columnSubBg, Integer.toHexString(getColor(R.color.beige)).substring(2));
+        values_.put(MyContract.Entry.buttonColor,  Integer.toHexString(getColor(R.color.light_brown)).substring(2));
+        db.insert(MyContract.Entry.TableName, null, values_);
+        initializeTheme();
+        settingsLayout_.setBackgroundColor(bg_color);
+        settingsHolder_.setBackgroundColor(sub_bg_color);
+        headerView.setBackgroundColor(button_color_);
+        return_home.setBackgroundTintList(ColorStateList.valueOf(button_color_));
+        saveButton.setBackgroundColor(button_color_);
+        resetButton.setBackgroundColor(button_color_);
     }
 
     public void changeTheme(View view){

@@ -228,7 +228,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#F1C900"
-                    android:onClick="defaultSettings"
                     android:text="@string/reset_to_default"
                     android:textColor="#000000"
                     app:layout_constraintBottom_toBottomOf="@+id/saveSettings"
