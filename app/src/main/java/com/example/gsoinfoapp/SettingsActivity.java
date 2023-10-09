@@ -70,6 +70,16 @@ public class SettingsActivity extends AppCompatActivity {
         settingsHolder_ = findViewById(R.id.settingsHolder);
         fontControl();
         themesControl();
+
+        fontStyles.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                SharedPreferences sharedPreferences = getSharedPreferences("PrefFont", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("selected_option", checkedId);
+                editor.apply();
+            }
+        });
         themeStyles.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -95,7 +105,13 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void fontControl(){
-        arialFont.setChecked(true);
+        fontStyles = findViewById(R.id.font_group);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("PrefFont", Context.MODE_PRIVATE);
+        int lastSelectedFont = sharedPreferences.getInt("selected_option", R.id.arial); // Default to the first option
+
+        fontStyles.check(lastSelectedFont);
+
     }
 
    public void themesControl() {
@@ -195,6 +211,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void changeTheme(View view){
+        changeFont();
         if (darkMode.isChecked()){
             setDarkMode();
         } else if (classicMode.isChecked()) {
@@ -202,6 +219,19 @@ public class SettingsActivity extends AppCompatActivity {
         } else if (defaultMode.isChecked()){
             setDefaultMode();
         }
+    }
+    
+    public void changeFont(){
+        SharedPreferences fontPref = getSharedPreferences("pref_font", Context.MODE_PRIVATE);
+        SharedPreferences.Editor fontEditor = fontPref.edit();
+        if(arialFont.isChecked()){
+            fontEditor.putInt("font_key", R.font.arial);
+        } else if (helveticaFont.isChecked()) {
+            fontEditor.putInt("font_key", R.font.freesans);
+        } else if (timesFont.isChecked()) {
+            fontEditor.putInt("font_key", R.font.times);
+        }
+        fontEditor.apply();
     }
 
 }

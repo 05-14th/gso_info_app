@@ -2,11 +2,14 @@ package com.example.gsoinfoapp;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.res.ResourcesCompat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton exitButton_;
     private TextView home_banner;
     private LinearLayout scrollLayout;
-    private TextView main_content;
+    private TextView main_content_;
+    private Typeface customType;
 
     private MyDBHelper dbHelper;
     private SQLiteDatabase db;
@@ -53,6 +58,12 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
             initializeTheme();
         }
+        SharedPreferences fontPref = getSharedPreferences("pref_font", Context.MODE_PRIVATE);
+        int currentFont = fontPref.getInt("font_key", R.font.arial);
+        main_content_ = findViewById(R.id.main_content);
+        Context context = getApplicationContext();
+        customType = ResourcesCompat.getFont(context, currentFont);
+        main_content_.setTypeface(customType);
     }
 
     public void useArchive(View view){

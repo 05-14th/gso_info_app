@@ -122,32 +122,16 @@
             tools:ignore="ExtraText">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/text_size"
+                android:text="@string/font_style"
                 android:textColor="#000000" />
-
-            <SeekBar
-                android:id="@+id/textSize"
-                style="@style/Widget.AppCompat.SeekBar.Discrete"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:max="4"
-                android:progress="1"
-                android:progressTint="#000000" />
 
             <RadioGroup
                 android:id="@+id/font_group"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/font_style"
-                    android:textColor="#000000" />
 
                 <RadioButton
                     android:id="@+id/arial"
