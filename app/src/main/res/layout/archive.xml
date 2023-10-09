@@ -137,7 +137,10 @@
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/a"
                     android:contentDescription="@string/todo__"
-                    tools:ignore="ContentDescription,NestedWeights" />
+                    tools:ignore="ContentDescription,NestedWeights"
+                    android:onClick="onClick"
+                    android:tag = "@drawable/a"
+                    />
 
                 <ImageView
                     android:id="@+id/image2"
