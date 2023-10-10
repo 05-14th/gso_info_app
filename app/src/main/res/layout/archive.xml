@@ -95,7 +95,7 @@
             android:background="#F1C900"
             android:gravity="center"
             android:minWidth="57dp"
-            android:text="@string/gallery"
+            android:text="Project Gallery"
             android:textAllCaps="true"
             android:textColor="#000000"
             android:textSize="24sp"
@@ -103,218 +103,20 @@
 
     </LinearLayout>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
-        <LinearLayout
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/image1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="20dp"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/a"
-                    android:contentDescription="@string/todo__"
-                    tools:ignore="ContentDescription,NestedWeights"
-                    android:onClick="onClick"
-                    android:tag = "@drawable/a"
-                    />
-
-                <ImageView
-                    android:id="@+id/image2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="20dp"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/b"
-                    android:contentDescription="@string/todo___"
-                    tools:ignore="ContentDescription" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/image3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:adjustViewBounds="true"
-                    android:padding="20dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/c"
-                    android:contentDescription="@string/todo_1"
-                    tools:ignore="ContentDescription,NestedWeights" />
-
-                <ImageView
-                    android:id="@+id/image4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="20dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/d"
-                    android:contentDescription="@string/todo3"
-                    tools:ignore="ContentDescription" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/image5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="20dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/e"
-                    tools:ignore="ContentDescription,NestedWeights"
-                    android:contentDescription="@string/todo4" />
-
-                <ImageView
-                    android:id="@+id/image6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="20dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/f"
-                    android:contentDescription="@string/todo5"
-                    tools:ignore="ContentDescription" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/image7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="20dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/g"
-                    tools:ignore="ContentDescription,NestedWeights"
-                    android:contentDescription="@string/todo6" />
-
-                <ImageView
-                    android:id="@+id/image8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="20dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/i"
-                    android:contentDescription="@string/todo7"
-                    tools:ignore="ContentDescription" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/image9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="20dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/j"
-                    tools:ignore="ContentDescription,NestedWeights"
-                    android:contentDescription="@string/todo8" />
-
-                <ImageView
-                    android:id="@+id/image10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:padding="20dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/k"
-                    android:contentDescription="@string/todo2"
-                    tools:ignore="ContentDescription" />
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+            android:layout_height="match_parent"
+            android:contentDescription="@string/slider" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
